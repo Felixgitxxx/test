@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文件列表</title>
+    <script>
+        // 当页面加载完成时执行以下代码
+        window.onload = function() {
+            // 获取显示文件列表的元素
+            var fileList = document.getElementById('fileList');
+            
+            // 发起HTTP GET请求，获取当前文件夹中的文件列表
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '.', true); // '.' 表示当前文件夹
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // 获取响应文本
+                    var files = xhr.responseText.split('\n');
+                    
+                    // 遍历文件列表，并创建相应的链接
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i].trim();
+                        if (file !== '' && file !== 'index.html') {
+                            var link = document.createElement('a');
+                            link.href = file; // 文件名作为链接地址
+                            link.innerHTML = file; // 文件名作为链接文本
+                            
+                            // 将链接添加到文件列表中
+                            fileList.appendChild(link);
+                            fileList.appendChild(document.createElement('br'));
+                        }
+                    }
+                }
+            };
+            xhr.send();
+        };
+    </script>
+</head>
+<body>
+    <h1>当前文件夹中的文件：</h1>
+    <div id="fileList"></div>
+</body>
+</html>
